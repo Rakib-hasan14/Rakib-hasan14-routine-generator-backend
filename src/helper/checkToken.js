@@ -1,5 +1,5 @@
 const { verify } = require('jsonwebtoken');
-const { UserModel } = require('../modules/models')
+const StudentSchema = require('../modules/model/student.model')
 
 
 module.exports.checkToken = async (req, res, next) => {
@@ -15,28 +15,28 @@ module.exports.checkToken = async (req, res, next) => {
 
         token = token.slice(7);
        
-        const { userId } = verify(token, process.env.JWTSECRET);
-        console.log(userId)
-        if (!userId) {
+        const { studentId } = verify(token, process.env.JWTSECRET);
+   
+        if (!studentId) {
             return res.status(403).json({
                 status: false,
-                message: 'Invalid22 token',
+                message: 'Invalid token',
             });
         }
 
-        const user = await UserModel.findOne({
-            _id: userId,
+        const student = await StudentSchema.findOne({
+            _id: studentId,
         });
 
-        if (!user) {
+        if (!student) {
             return res.status(403).json({
                 status: false,
                 error: 'Invalid1 token',
             });
         }
 
-        req.userId = userId;
-        req.requestId = userId;
+        req.studentId = studentId;
+        req.requestId = studentId;
 
         next();
     } catch (err) {

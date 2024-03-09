@@ -100,3 +100,20 @@ exports.signIn = async (req, res) => {
         errorResponse(res, error.message)
     }
 }
+
+exports.getProfile = async (req, res) => {
+    try {
+        const id = req.studentId
+
+        const profile = await StudentSchema.findById(id).select('-password _id')
+
+        if (!profile) return errorResponse(res, 'User not found')
+
+        successResponse(res, {
+            message: 'Get Profile',
+            data: profile
+        })
+    } catch (error) {
+        errorResponse(res, error.message)
+    }
+}

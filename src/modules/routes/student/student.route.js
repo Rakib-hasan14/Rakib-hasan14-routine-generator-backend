@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { signUp, signIn } = require('../../controller/student.controller')
+const { checkToken } = require('../../../helper/checkToken')
+const { signUp, signIn, getProfile } = require('../../controller/student.controller')
 
 /**
  * /authentication
@@ -12,6 +13,8 @@ const { signUp, signIn } = require('../../controller/student.controller')
 
 router.post('/sign-in', signIn);
 router.post('/sign-up', signUp);
+
+router.get('/profile', checkToken, getProfile);
 
 
 module.exports = router;
