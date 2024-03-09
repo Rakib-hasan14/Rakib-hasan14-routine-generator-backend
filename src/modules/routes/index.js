@@ -10,5 +10,6 @@ router.get('/', async (req, res) => {
 });
 
 router.use('/student', require('./student/student.route'));
+router.use('/schedule', require('./schedule/schedule.route'));
 
 module.exports = router;
