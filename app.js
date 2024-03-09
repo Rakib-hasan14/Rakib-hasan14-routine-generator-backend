@@ -15,6 +15,8 @@ app.use(
     cors()
 );
 
+app.use('/', require('./src/modules/routes/index'));
+
 (async () => {
     await mongoose
         .connect(process.env.MONGODB_URL, {
