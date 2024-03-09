@@ -1,5 +1,7 @@
 const { successResponse, errorResponse } = require('../../helper/apiResponse')
 const ScheduleSchema = require('../model/schedule.model')
+const mongoose = require('mongoose')
+const { ObjectId } = mongoose.Types
 
 exports.createSchedule = async (req, res) => {
     try {
@@ -13,9 +15,21 @@ exports.createSchedule = async (req, res) => {
         } = req.body
 
 
+
+
         const isExists = await ScheduleSchema.findOne({ dayName, start_time, student_id })
 
         if (isExists) return errorResponse(res, 'Already exists in this time')
+
+        const dayNumber = {
+            sunday: 0,
+            monday: 1,
+            tuesday: 2,
+            wednesday: 3,
+            thursday: 4,
+            friday: 5,
+            saturday: 6
+        }
 
         const schedule = await ScheduleSchema.create({
             title,
@@ -23,7 +37,8 @@ exports.createSchedule = async (req, res) => {
             start_time,
             end_time,
             dayName,
-            student_id
+            student_id,
+            dayNumber: dayNumber[dayName]
         })
 
         successResponse(res, {
@@ -85,6 +100,33 @@ exports.deleteSchedule = async (req, res) => {
         successResponse(res, {
             message: 'Schedule Deleted',
             result: true
+        })
+    } catch (error) {
+        errorResponse(res, error.message)
+    }
+}
+
+exports.getSchedules = async (req, res) => {
+    try {
+        const student_id = req.studentId
+
+        const schedules = await ScheduleSchema.aggregate([
+            {
+                $match: {
+                    student_id: new ObjectId(student_id)
+                }
+            },
+            {
+                $group: {
+                    _id: '$dayName',
+                    data: { $push: '$$ROOT' }
+                }
+            }
+        ])
+
+        successResponse(res, {
+            message: 'Get schedules',
+            data: schedules
         })
     } catch (error) {
         errorResponse(res, error.message)

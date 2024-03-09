@@ -26,6 +26,10 @@ const ScheduleSchema = new Schema(
         student_id: {
             type: Schema.Types.ObjectId,
             required: true
+        },
+        dayNumber: {
+            type: Number,
+            required: true
         }
     },
     {

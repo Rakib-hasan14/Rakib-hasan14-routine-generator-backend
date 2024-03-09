@@ -87,6 +87,8 @@ exports.signIn = async (req, res) => {
         delete student._doc.password;
         delete student._doc._id;
 
+        res.cookie('token',token)
+
         successResponse(res, {
             message: 'Login Success.',
             data: {
@@ -113,6 +115,18 @@ exports.getProfile = async (req, res) => {
             message: 'Get Profile',
             data: profile
         })
+    } catch (error) {
+        errorResponse(res, error.message)
+    }
+}
+
+exports.logout = async (req, res) => {
+    try {
+        res.cookie('token','')
+
+        successResponse(res, {
+            message: 'Logout Success.'
+        });
     } catch (error) {
         errorResponse(res, error.message)
     }

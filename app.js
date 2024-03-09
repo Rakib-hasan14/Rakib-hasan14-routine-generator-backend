@@ -12,7 +12,10 @@ app.use(express.json())
 
 
 app.use(
-    cors()
+    cors({
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+    })
 );
 
 app.use('/', require('./src/modules/routes/index'));
