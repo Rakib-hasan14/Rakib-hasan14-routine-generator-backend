@@ -25,7 +25,7 @@ exports.signUp = async (req, res) => {
 
         // Create token
         const token = jwt.sign(
-            { student_id: student._id },
+            { studentId: student._id },
             process.env.JWTSECRET,
             {
                 expiresIn: "2h",
