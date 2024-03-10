@@ -121,6 +121,10 @@ exports.getSchedules = async (req, res) => {
                     _id: '$dayName',
                     data: { $push: '$$ROOT' }
                 }
+            },{
+                $sort: {
+                    priority: 1
+                }
             }
         ])
 
